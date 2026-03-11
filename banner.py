@@ -129,12 +129,6 @@ class RansomwareBanner:
 
         #Ignore placeholder
         if pwd == "Enter Decryption Key":
-<<<<<<< Updated upstream
-            return 
-        
-        if pwd == self.correct_key:
-            messagebox.showinfo("Access Restored","Files successfully been decrypted ✅🔓")
-=======
             return
 
         if pwd == self.correct_key:
@@ -144,7 +138,6 @@ class RansomwareBanner:
             for path in discovered_files:
                 Decryption.decrypt_folder(path['path'])
             # makes sure that file is decrypted for mock_test
->>>>>>> Stashed changes
             self.root.destroy()
         
         if pwd != self.correct_key:
@@ -152,30 +145,16 @@ class RansomwareBanner:
             messagebox.showerror("ERROR","Invalid decryption key provided.")
 
         if self.failed_attempts > 2:
-<<<<<<< Updated upstream
-            messagebox.showerror("ERROR","After failing 3 attempts, Files have now been corrupted!☠️☠️☠️")
-=======
             messagebox.showerror(
                 "ERROR", "After failing 3 attempts, Files have now been corrupted!☠️☠️☠️"
             )
             for path in discovered_files:
                 Decryption.decrypt_folder(path['path'])
             # makes sure that file is decrypted for mock_test
->>>>>>> Stashed changes
             self.root.destroy()
     def exit_simulation(self):
-<<<<<<< Updated upstream
-        self.root.destroy()
-
-
-if __name__ == "__main__":
-    root = tk.Tk()
-    app = RansomwareBanner(root)
-    root.mainloop()
-=======
         for path in discovered_files:
             Decryption.decrypt_folder(path['path'])
          # makes sure that file is decrypted for mock_test
         self.root.destroy()
 
->>>>>>> Stashed changes
