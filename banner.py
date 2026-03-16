@@ -2,15 +2,12 @@ import tkinter as tk
 from tkinter import messagebox
 import time
 import winsound
-<<<<<<< Updated upstream
-
-=======
+import Encryption
 import Decryption
 import filediscovery
 
-#Stores all the discoved files to decrypt later
-discovered_files = filediscovery.scan_files()
->>>>>>> Stashed changes
+folder_path = "Important_Folder"
+
 
 class RansomwareBanner:
     def __init__(self, root):
@@ -27,7 +24,7 @@ class RansomwareBanner:
             text="⚠ ALL YOUR FILES HAVE BEEN ENCRYPTED BY THE PHISH2RANSOM GROUP⚠",
             font=("Helvetica", 28, "bold"),
             fg="white",
-            bg="darkred"
+            bg="darkred",
         )
         self.title_label.pack(pady=40)
 
@@ -43,7 +40,7 @@ class RansomwareBanner:
             font=("Helvetica", 20),
             fg="white",
             bg="darkred",
-            justify="center"
+            justify="center",
         )
         self.message_label.pack(pady=20)
 
@@ -53,7 +50,7 @@ class RansomwareBanner:
             text="Time Remaining: 15:00",
             font=("Helvetica", 24, "bold"),
             fg="yellow",
-            bg="darkred"
+            bg="darkred",
         )
         self.timer_label.pack(pady=30)
 
@@ -68,20 +65,26 @@ class RansomwareBanner:
             font=("Helvetica", 18),
             fg="white",
             bg="darkred",
-            justify="center"
+            justify="center",
         )
         self.instructions_label.pack(pady=20)
 
-
-        #Decryption key Textbox
-        self.code_entry = tk.Entry( root, font=("Helvetica", 18), justify="center", fg="grey")
-        self.code_entry.insert(0,"Enter Decryption Key")
+        # Decryption key Textbox
+        self.code_entry = tk.Entry(
+            root, font=("Helvetica", 18), justify="center", fg="grey"
+        )
+        self.code_entry.insert(0, "Enter Decryption Key")
         self.code_entry.pack(pady=10)
         self.code_entry.bind("<FocusIn>", self.clear_placeholder)
         self.code_entry.bind("<FocusOut>", self.add_placeholder)
-        
-        #Submit button
-        self.submit_button = tk.Button( root,text="Submit Decryption Key", font=("Helvetica", 16), command=self.check_decrypt_key)
+
+        # Submit button
+        self.submit_button = tk.Button(
+            root,
+            text="Submit Decryption Key",
+            font=("Helvetica", 16),
+            command=self.check_decrypt_key,
+        )
         self.submit_button.pack(pady=10)
 
         # Exit Button (Lab Safe)
@@ -89,11 +92,10 @@ class RansomwareBanner:
             root,
             text="Exit Simulation",
             font=("Helvetica", 16),
-            command=self.exit_simulation
+            command=self.exit_simulation,
         )
         self.exit_button.pack(pady=40)
         self.update_timer()
-
 
     def increment(self):
         self.failed_attempts += 1
@@ -104,57 +106,64 @@ class RansomwareBanner:
             time_format = f"Time Remaining: {mins:02d}:{secs:02d}"
             self.timer_label.config(text=time_format)
 
-            #Start beeping at 10mins
+            # Start beeping at 10mins
             if self.time_remaining <= 600:
                 winsound.Beep(1000, 500)
 
             self.time_remaining -= 1
             self.root.after(1000, self.update_timer)
-            
+
         else:
             messagebox.showinfo("Simulation", "Timer is up!")
 
-    def clear_placeholder(self,event):
+    def clear_placeholder(self, event):
         if self.code_entry.get() == "Enter Decryption Key":
-            self.code_entry.delete(0,tk.END)
+            self.code_entry.delete(0, tk.END)
             self.code_entry.config(fg="black")
 
-    def add_placeholder(self,event):
+    def add_placeholder(self, event):
         if not self.code_entry.get():
-            self.code_entry.insert(0,"Enter Decryption Key")
+            self.code_entry.insert(0, "Enter Decryption Key")
             self.code_entry.config(fg="grey")
-    
+
     def check_decrypt_key(self):
         pwd = self.code_entry.get()
 
-        #Ignore placeholder
+        # Ignore placeholder
         if pwd == "Enter Decryption Key":
             return
 
         if pwd == self.correct_key:
+            discover_path = filediscovery.scan_files()
+            for path in discover_path:
+                Decryption.decrypt_file(path["path"])  # Decrypts the file
             messagebox.showinfo(
                 "Access Restored", "Files successfully been decrypted ✅🔓"
             )
-            for path in discovered_files:
-                Decryption.decrypt_folder(path['path'])
-            # makes sure that file is decrypted for mock_test
             self.root.destroy()
-        
+
         if pwd != self.correct_key:
-            self.increment() # increments by 1
-            messagebox.showerror("ERROR","Invalid decryption key provided.")
+            self.increment()  # increments by 1
+            messagebox.showerror("ERROR", "Invalid decryption key provided.")
 
         if self.failed_attempts > 2:
             messagebox.showerror(
                 "ERROR", "After failing 3 attempts, Files have now been corrupted!☠️☠️☠️"
             )
-            for path in discovered_files:
-                Decryption.decrypt_folder(path['path'])
-            # makes sure that file is decrypted for mock_test
+            discover_path = filediscovery.scan_files()
+            for path in discover_path:
+                Decryption.decrypt_file(path["path"])  # Decrypts the file
             self.root.destroy()
+
     def exit_simulation(self):
-        for path in discovered_files:
-            Decryption.decrypt_folder(path['path'])
-         # makes sure that file is decrypted for mock_test
+        discover_path = filediscovery.scan_files()
+        for path in discover_path:
+            Decryption.decrypt_file(path["path"])  # Decrypts the file
         self.root.destroy()
 
+
+# if __name__ == "__main__":
+#    Encryption.encrypt_folder(folder_path)
+#    root = tk.Tk()
+#    app = RansomwareBanner(root)
+#   root.mainloop()
