@@ -39,8 +39,8 @@ def encrypt_file(filepath):
     print("Nonce: ", nonce)
     print("AES Key: ", aes_key)
 
-    with open("aes_key.txt", "wb") as file:
-        file.write(aes_key)
+    #with open("aes_key.txt", "wb") as file:
+    #    file.write(aes_key)
 
     with open(filepath, "rb") as file:
         plaintext = file.read()
